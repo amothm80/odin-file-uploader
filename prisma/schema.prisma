@@ -23,9 +23,31 @@ model Session {
 }
 
 model User{
-    id  Int @id @default(autoincrement())
+    id  String @id @default(ulid())
     email   String  @unique
     hash    String
     salt    String
     creationDate DateTime @db.Timestamptz(3) @default(now())
+    folders Folder[]
+    files File[]
+}
+
+model Folder{
+  id String @id @default(ulid())
+  name String
+  userId String
+  user  User @relation(fields: [userId], references: [id])
+  files File[]
+  creationDate  DateTime @db.Timestamptz(3) @default(now())
+}
+model File{
+  id String @id @default(ulid())
+  name String
+  location String
+  folderId String
+  size  Int
+  uploadTime DateTime @db.Timestamptz(3) @default(now())
+  folder Folder @relation(fields: [folderId], references: [id])
+  userId String
+  user User @relation(fields: [userId], references: [id])
 }
