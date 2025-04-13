@@ -1,7 +1,8 @@
 import passport from "passport";
 import passportlocal from "passport-local";
 import { validatePassword } from "../lib/passwordUtils.js";
-import {prisma} from '../config/database.js'
+import { getUserById,getUserByEmailForAuth } from "../model/user.js";
+
 const LocalStrategy = passportlocal.Strategy;
 
 //set custom username & password field names
@@ -20,11 +21,7 @@ const verifyCallback = async (username, password, done) => {
     // const user = rows[0];
     // const user = await prisma.User.
     console.log(username)
-    const user = await prisma.user.findUnique({
-      where:{
-        email: username
-      }
-    })
+    const user = await getUserByEmailForAuth(username)
     if (!user) {
       return done(null, false, { message: "incorrect username" });
     }
@@ -50,11 +47,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = prisma.user.findUnique({
-      where:{
-        id: id
-      }
-    })
+    const user = await getUserById(id)
     // const { rows } = await pool.query("select * from users where id = $1", [
     //   id,
     // ]);

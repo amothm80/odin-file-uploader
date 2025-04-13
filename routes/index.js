@@ -3,8 +3,7 @@ import session from "express-session";
 import passport from "passport";
 import { validatePassword, genPassword } from "../lib/passwordUtils.js";
 import { isAuthenticated, isAdmin } from "./authentication.js";
-import {prisma} from '../config/database.js';
-
+import { createUser } from "../model/user.js";
 export const router = express.Router();
 
 /**
@@ -49,17 +48,7 @@ router.post("/login", function (req, res, next) {
 // TODO
 router.post("/register", async (req, res, next) => {
   const saltHash = genPassword(req.body.password);
-  await prisma.user.create({
-    data:{
-      email: req.body.email,
-      hash: saltHash.hash,
-      salt: saltHash.salt,
-    }
-  })
-  // await pool.query(
-  //   "INSERT INTO users (username, hash, salt) VALUES ($1, $2, $3)",
-  //   [req.body.username, saltHash.hash, saltHash.salt]
-  // );
+  await createUser(req.body.email,saltHash.hash, saltHash.salt)
   res.redirect("/");
 });
 
