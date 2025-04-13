@@ -1,0 +1,29 @@
+extends layout.pug 
+block content
+    div(class='form')
+        h5 Log In
+        form(action="/login" method="post" class='login-form')
+            -let fields= {}
+            if locals.fields
+                -fields = locals.fields
+            else
+                -fields = {email:'', password:''}
+            div 
+                //- div 
+                //-     label(for='email') eMail 
+                div 
+                    input(type="email" id='email' name='email' value=fields.email placeholder='eMail')
+            div 
+                //- div 
+                //-     label(for='password') Password 
+                div 
+                    input(type="password" id='password' name='password' value=fields.password placeholder='password') 
+            div 
+                button(type='submit') submit
+            - if (locals.error)
+                div 
+                    p=locals.error   
+            - if (locals.success)
+                div 
+                    p=locals.success   
+        h5 If you dont have an account, please <a href="/register">register</a>

@@ -1,0 +1,55 @@
+extends layout.pug 
+block content
+    div(class='form')
+        h5 Please Register
+        form(action="/register" method='post' class='register-form')
+            -let fields= {}
+            if locals.fields
+                -fields = locals.fields
+            else
+                -fields = {email:'', name:'', password:'',confirmPassword:'', membership:'' }
+            div
+                div 
+                    label(for="email") eMail 
+                div
+                    input(type="email" id='email' name='email' value=fields.email required)
+                - if (locals.errors && locals.errors.email)
+                    div 
+                        p=locals.errors.email.msg
+            div 
+                div 
+                    label(for="name") Name 
+                div 
+                    input(type="name" id='text' name='name' value=fields.name  required)
+                - if (locals.errors && locals.errors.name)
+                    div 
+                        p=locals.errors.name.msg
+            div 
+                div 
+                    label(for="password") Password 
+                div
+                    input(type='password' id='password' name='password' value=fields.password required)
+                - if (locals.errors && locals.errors.password)
+                    div 
+                        p=locals.errors.password.msg
+            div 
+                div
+                    label(for='') Confirm Password 
+                div 
+                    input(type='password' id='confirmPassword' name='confirmPassword' value=fields.confirmPassword required)
+                - if (locals.errors && locals.errors.confirmPassword)
+                    div 
+                        p=locals.errors.confirmPassword.msg
+            div 
+                div 
+                    label(for='membership') Membership Code (optional)
+                div 
+                    input(type='text' id='membership' name='membership' value=fields.membership)
+            div 
+                div 
+                    label(for='admin') Admin Code (optional)
+                div 
+                    input(type="text" id='admin' name='admin' value=fields.admin)
+            div 
+                button(type='submit') Submit  
+

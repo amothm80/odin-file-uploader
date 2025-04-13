@@ -10,6 +10,8 @@ import { PrismaSessionStore }  from '@quixo3/prisma-session-store';
 import { prisma } from "./config/database.js";
 
 const app = express();
+
+app.use(morgan("dev"));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 app.disable('x-powered-by');
@@ -21,6 +23,8 @@ app.use(helmet())
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("static"));
+
 
 /**
  * -------------- SESSION SETUP ----------------
@@ -56,13 +60,18 @@ app.use(
 /**
  * -------------- PASSPORT AUTHENTICATION ----------------
  */
-import './config/passport.js';
+import './controller/passport.js';
 app.use(passport.session());
 
-app.use((req,res,next)=>{
+app.use((req, res, next) => {
+  if (req.isAuthenticated()){
+    res.locals.name = req.user.name;
+  }else{
+    delete res.locals.name;
+  }
   console.log(req.user)
-  next()
-})
+  next();
+});
 
 /**
  * -------------- ROUTES ----------------
@@ -70,16 +79,19 @@ app.use((req,res,next)=>{
 
 // Imports all of the routes from ./routes/index.js
 app.use(router);
+app.use(function (req, res, next) {
+  res.status(404).render('404')
+});
 
 /**
  * Error
  */
 
-app.use((err,req,res,next)=>{
-  console.error(new Date().toISOString())
-  console.log(err)
-  res.status(500).send(`Something broke!`)
-})
+app.use((err, req, res, next) => {
+  console.error(new Date().toISOString());
+  console.log(err);
+  res.status(500).render('500');
+});
 
 /**
  * -------------- SERVER ----------------
