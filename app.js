@@ -8,6 +8,7 @@ import { __dirname } from "./lib/dirname.js";
 import { router } from "./routes/index.js";
 import { PrismaSessionStore }  from '@quixo3/prisma-session-store';
 import { prisma } from "./config/database.js";
+import morgan from "morgan";
 
 const app = express();
 
@@ -65,7 +66,7 @@ app.use(passport.session());
 
 app.use((req, res, next) => {
   if (req.isAuthenticated()){
-    res.locals.name = req.user.name;
+    res.locals.name = req.user.email;
   }else{
     delete res.locals.name;
   }

@@ -1,5 +1,5 @@
 // import { addUserToUsers, findUserByEmail } from "../model/users.js";
-import { createUser } from "../model/user.js";
+import { createUser,getUserByEmail } from "../model/user.js";
 import { body, matchedData, validationResult } from "express-validator";
 import { validatePassword, genPassword } from "../lib/passwordUtils.js";
 
@@ -12,10 +12,10 @@ export const registrationValidation = () => {
       .isEmail()
       .withMessage("Invalid email")
       .custom(async (value) => {
-        const { rows } = await findUserByEmail(value);
+        const user = await getUserByEmail(value)
         console.log(value)
-        console.log(rows)
-        if (rows.length > 0) {
+        console.log(user)
+        if (user) {
           return Promise.reject("email already in use");
         }
       })

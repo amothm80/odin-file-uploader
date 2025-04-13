@@ -1,9 +1,10 @@
 import express from "express";
-import session from "express-session";
-import passport from "passport";
-import { validatePassword, genPassword } from "../lib/passwordUtils.js";
-import { isAuthenticated, isAdmin } from "./authentication.js";
-import { createUser } from "../model/user.js";
+// import session from "express-session";
+// import passport from "passport";
+// import { validatePassword, genPassword } from "../lib/passwordUtils.js";
+// import { createUser } from "../model/user.js";
+import { authenticateRouter } from "./authenticate.js";
+import { registerRouter } from "./register.js";
 export const router = express.Router();
 
 router.get("/", (req, res, next) => {

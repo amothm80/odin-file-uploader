@@ -1,0 +1,9 @@
+div <!--intentionally empty-->
+div(class="title")
+    h2 Website Name
+div(class='user-header')
+    if (locals.name)
+        div 
+            p=`Hi ${locals.name}` 
+        div
+            a(href="/logout") logout

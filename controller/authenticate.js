@@ -1,10 +1,10 @@
 import passport from "passport";
 
 export function getLogin(req, res, next) {
-  console.log("login route")
+  console.log("login route");
 
-  if (req.isAuthenticated()){
-    return res.redirect('/posts')
+  if (req.isAuthenticated()) {
+    return res.redirect("/login-success");
   }
   if (req.session.loginError) {
     res.locals.error = "Wrong email/password provided";
@@ -40,8 +40,16 @@ export function postLogin(req, res, next) {
 }
 
 export function loginFailure(req, res, next) {
-  req.session.loginError = true;
-  res.redirect("/login");
+  // req.session.loginError = true;
+  res.render("login-failure");
+}
+
+export function loginSuccess(req, res, next) {
+  if (req.isAuthenticated()) {
+    res.render("login-success");
+  } else {
+    res.redirect("/login");
+  }
 }
 
 export function getLogout(req, res, next) {
