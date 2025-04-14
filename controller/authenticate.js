@@ -23,6 +23,7 @@ export function postLogin(req, res, next) {
       return next(err);
     }
     if (!user) {
+      console.log(req.body)
       res.locals.fields = req.body;
       res.locals.error = info.message;
       return res.render("login");

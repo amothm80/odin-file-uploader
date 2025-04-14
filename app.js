@@ -14,7 +14,7 @@ const app = express();
 
 app.use(morgan("dev"));
 app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "pug");
+app.set("view engine", "ejs");
 app.disable('x-powered-by');
 app.use((req, res, next) => {
     res.removeHeader('Server');
