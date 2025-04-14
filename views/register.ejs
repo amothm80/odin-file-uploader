@@ -1,0 +1,45 @@
+<%- include('./fragments/head') %> <%- include('./fragments/header') %>
+<div class="form">
+  <h5>Please Register</h5>
+  <form action="/register" method="post" class="register-form">
+    <% 
+    let fields = {} 
+    if (locals.fields)
+    { 
+        fields=locals.fields 
+    }else{ 
+        fields={email:'', password:'', confirmPassword:'' } 
+    } 
+    %>
+    <div>
+      <div>
+        <input type="email" id="email" name="email" placeholder="email" required value=<%= fields.email %>>
+        <% if (locals.errors && locals.errors.email){%>
+        <div>
+          <p> <%= locals.errors.email.msg %> </p>
+        </div>
+        <%}%>
+      </div>
+    </div>
+    <div>
+      <div><input type="password" id="password" placeholder="password" name="password" required value=<%= fields.password %>>
+        <% if (locals.errors && locals.errors.password){%>
+        <div>
+          <p> <%= locals.errors.password.msg %> </p>
+        </div>
+        <%}%>
+      </div>
+    </div>
+    <div>
+      <div><input type="password" id="confirmPassword" placeholder="confirm password" name="confirmPassword" required value=<%= fields.confirmPassword %>>
+        <% if (locals.errors && locals.errors.confirmPassword){%>
+        <div>
+          <p> <%= locals.errors.confirmPassword.msg %> </p>
+        </div>
+        <%}%>
+      </div>
+    </div>
+    <div><button type="submit">Submit</button></div>
+  </form>
+</div>
+<%- include('./fragments/footer') %>

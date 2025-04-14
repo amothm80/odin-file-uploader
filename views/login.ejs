@@ -1,8 +1,8 @@
 <%- include('./fragments/head') %>
 <%- include('./fragments/header') %>
 <div class="form">
-    <h5>Log In</h5>
-    <form action="/login" method="post" class="login-form">
+  <h5>Log In</h5>
+  <form action="/login" method="post" class="login-form">
     <% 
     let fields = {} 
     if (locals.fields){
@@ -12,19 +12,23 @@
     }
     %>
     <div>
-        <div><input type="email" id="email" name="email" placeholder="email" value=<%= fields.email %>></div>
+      <div><input type="email" id="email" name="email" placeholder="email" required value=<%= fields.email %>></div>
     </div>
     <div>
-        <div><input type="password" id="password" name="password" placeholder="password" value=<%=fields.password  %>></div>
+      <div><input type="password" id="password" name="password" placeholder="password" value=<%=fields.password  %>></div>
     </div>
     <div><button type="submit">Submit</button></div>
-    </form>
-    <% if (locals.error) {%>
-        <div><p> <%=locals.error  %> </p></div>
-    <% } %>
-    <% if (locals.success){ %>
-        <div><p><%= locals.success %> </p></div>
-        <% } %>
+  </form>
+  <% if (locals.error) {%>
+  <div>
+    <p> <%=locals.error  %> </p>
+  </div>
+  <% } %>
+  <% if (locals.success){ %>
+  <div>
+    <p><%= locals.success %> </p>
+  </div>
+  <% } %>
 
 </div>
 <%- include('./fragments/footer') %>
