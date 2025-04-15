@@ -28,15 +28,15 @@ router.use(registerRouter)
 
 
 
-router.use((req,res,next)=>{
-  console.log("login redirect when unauthenticated")
-  console.log("Authenticated:", req.isAuthenticated());
+// router.use((req,res,next)=>{
+//   console.log("login redirect when unauthenticated")
+//   console.log("Authenticated:", req.isAuthenticated());
 
-  if (!req.isAuthenticated()){
-    res.redirect('/login')
-  }
-  next()
-})
+//   if (!req.isAuthenticated()){
+//     res.redirect('/login')
+//   }
+//   next()
+// })
 
 // /**
 //  * -------------- POST ROUTES ----------------

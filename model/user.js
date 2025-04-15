@@ -58,6 +58,57 @@ export async function createUser(email, hash, salt) {
   });
 }
 
+export async function updateEmail(id,email){
+  return await prisma.user.update({
+    where:{
+      id:id
+    },
+    data:{
+      email:email
+    }
+  })
+}
+
+export async function updatePasswordById(id,hash,salt){
+  return await prisma.user.update({
+    where:{
+      id:id
+    },
+    data:{
+      hash:hash,
+      salt:salt
+    }
+  })
+}
+
+export async function updatePasswordByEmail(email,hash,salt){
+  return await prisma.user.update({
+    where:{
+      email:email
+    },
+    data:{
+      hash:hash,
+      salt:salt
+    }
+  })
+}
+
+export async function deleteAccountById(id){
+  return await prisma.user.delete({
+    where:{
+      id:id
+    }
+  })
+}
+
+export async function deleteAccountByEmail(email){
+  return await prisma.user.delete({
+    where:{
+      email:email
+    }
+  })
+}
+
 // await prisma.user.create({
 //   data: {},
 // });
