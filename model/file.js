@@ -1,9 +1,18 @@
 import { prisma } from "../config/database.js";
 
-export async function getFilesForUser(userId){
+export async function getFiles(userId){
     return await prisma.file.findMany({
         where:{
             userId:userId
+        }
+    })
+}
+
+export async function getFilesForFolder(userId, folderId){
+    return await prisma.file.findMany({
+        where:{
+            userId: userId,
+            folderId: folderId
         }
     })
 }

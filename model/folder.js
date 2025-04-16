@@ -1,6 +1,6 @@
 import { prisma } from "../config/database.js";
 
-export async function getFoldersForUser(userId){
+export async function getFolder(userId){
     return await prisma.folder.findMany({
         where:{
             userId:userId
@@ -8,7 +8,7 @@ export async function getFoldersForUser(userId){
     })
 }
 
-export async function createFolderForUser(userId,name){
+export async function createFolder(userId,name){
     return await prisma.folder.create({
         data:{
             name:name,

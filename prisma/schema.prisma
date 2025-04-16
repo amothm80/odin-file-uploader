@@ -44,9 +44,9 @@ model File{
   id String @id @default(ulid())
   name String
   location String
-  folderId String
   size  Int
   uploadTime DateTime @db.Timestamptz(3) @default(now())
+  folderId String
   folder Folder @relation(fields: [folderId], references: [id])
   userId String
   user User @relation(fields: [userId], references: [id])
