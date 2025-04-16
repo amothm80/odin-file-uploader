@@ -20,13 +20,13 @@ const verifyCallback = async (username, password, done) => {
     // );
     // const user = rows[0];
     // const user = await prisma.User.
-    console.log(username)
+    // console.log(username)
     const user = await getUserByEmailForAuth(username)
     if (!user) {
       return done(null, false, { message: "incorrect username" });
     }
     // const match = await bcrypt.compare(password, user.password);
-    console.log(user)
+    // console.log(user)
     const isValid = validatePassword(password, user.hash, user.salt);
     if (!isValid) {
       return done(null, false, { message: "incorrect password" });

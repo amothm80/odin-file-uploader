@@ -1,1 +1,5 @@
 <header>Website Name</header>
+<% if (locals.name) {%>
+<p>welcome <%= name %></p>
+<a href="/logout">Logout</a>
+<%}%>

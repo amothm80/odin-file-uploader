@@ -13,8 +13,8 @@ export const registrationValidation = () => {
       .withMessage("Invalid email")
       .custom(async (value) => {
         const user = await getUserByEmail(value)
-        console.log(value)
-        console.log(user)
+        // console.log(value)
+        // console.log(user)
         if (user) {
           return Promise.reject("email already in use");
         }
@@ -50,7 +50,7 @@ export const registrationValidation = () => {
 
 export async function registerUser(req, res, next) {
   const result = validationResult(req);
-  console.log(result)
+  // console.log(result)
   if (result.isEmpty()) {
     const data = matchedData(req);
     try {

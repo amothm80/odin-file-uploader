@@ -39,6 +39,7 @@ model Folder{
   user  User @relation(fields: [userId], references: [id])
   files File[]
   creationDate  DateTime @db.Timestamptz(3) @default(now())
+  @@unique([name,userId])
 }
 model File{
   id String @id @default(ulid())
@@ -50,4 +51,5 @@ model File{
   folder Folder @relation(fields: [folderId], references: [id])
   userId String
   user User @relation(fields: [userId], references: [id])
+  @@unique([name,userId,folderId])
 }

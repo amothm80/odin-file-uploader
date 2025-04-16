@@ -23,7 +23,7 @@ export function postLogin(req, res, next) {
       return next(err);
     }
     if (!user) {
-      console.log(req.body)
+      // console.log(req.body)
       res.locals.fields = req.body;
       res.locals.error = info.message;
       return res.render("login");
@@ -35,7 +35,7 @@ export function postLogin(req, res, next) {
       if (err) {
         return next(err);
       }
-      return res.redirect("/login-success");
+      return res.redirect(`/user/${user.id}`);
     });
   })(req, res, next);
 }
