@@ -20,8 +20,10 @@ app.use((req, res, next) => {
     res.removeHeader('Server');
     next();
 });
-app.use(helmet())
-
+app.use(helmet({
+  xContentTypeOptions: false,
+}))
+app.enable('strict routing'); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("static"));

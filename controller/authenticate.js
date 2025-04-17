@@ -35,7 +35,7 @@ export function postLogin(req, res, next) {
       if (err) {
         return next(err);
       }
-      return res.redirect(`/user/${user.id}`);
+      return res.redirect(`files/`);
     });
   })(req, res, next);
 }

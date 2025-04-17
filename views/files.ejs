@@ -1,0 +1,39 @@
+<%- include('./fragments/head') %> <%- include('./fragments/header') %>
+<script src="/js/files.js" defer></script> 
+<h3>Files</h3>
+<button id="createFolderPop">Create Folder</button>
+<table>
+  <tr>
+    <th>Name</th>
+  </tr>
+  <% if (locals.pathFolders && locals.user && folderDetails){
+    for (let pathFolder of pathFolders){
+    %>
+  <tr>
+    <td>
+      <% if (pathFolder.name == folderDetails.name && pathFolder.name != ''){%>
+      <a href="..">..</a>
+      <%}else{%>
+      <a href="<%= `${pathFolder.name}`%>"><%=pathFolder.name%></a>
+      <%}%>
+    </td>
+  </tr>
+  <%}} %>
+      <% if (locals.files){
+    for (let file of files){%>
+  <tr>
+    <td><%=file.name%></td>
+  </tr>
+
+
+  <%}} %>
+</table>
+<dialog id="createFolderDialog">
+  <form action="createFolder" method="post">
+    <label for="folderName">Folder Name</label>
+    <input type="text" name="folderName" required>
+    <button type="submit" id="submit">Submit</button>
+    <button type="button" id="cancel">Cancel</button>
+  </form>
+</dialog>
+<%- include('./fragments/footer') %>

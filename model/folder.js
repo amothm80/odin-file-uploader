@@ -1,9 +1,32 @@
 import { prisma } from "../config/database.js";
 
-export async function getFolder(userId){
+export async function getAllFolders(userId){
     return await prisma.folder.findMany({
         where:{
             userId:userId
+        }
+    })
+}
+
+export async function getFolderForPath(userId, path){
+    return await prisma.folder.findMany({
+        where:{
+            userId: userId,
+            name: {
+                startsWith: path
+            }
+        }
+    })
+}
+
+export async function getFolderByName(userId, name){
+    return await prisma.folder.findUnique({
+        where:{
+            name_userId:{
+                userId: userId,
+                name:name
+            }
+
         }
     })
 }
