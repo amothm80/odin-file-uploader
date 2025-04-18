@@ -14,42 +14,48 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model Session {
   id        String   @id
   sid       String   @unique
-  data      String   
-  expiresAt   DateTime @db.Timestamptz(3)
+  data      String
+  expiresAt DateTime @db.Timestamptz(3)
 }
 
-model User{
-    id  String @id @default(ulid())
-    email   String  @unique
-    hash    String
-    salt    String
-    creationDate DateTime @db.Timestamptz(3) @default(now())
-    folders Folder[]
-    files File[]
+model User {
+  id           String   @id @default(ulid())
+  email        String   @unique
+  hash         String
+  salt         String
+  creationDate DateTime @default(now()) @db.Timestamptz(3)
+  folders      Folder[]
+  files        File[]
 }
 
-model Folder{
-  id String @id @default(ulid())
-  name String
-  userId String
-  user  User @relation(fields: [userId], references: [id])
-  files File[]
-  creationDate  DateTime @db.Timestamptz(3) @default(now())
-  @@unique([name,userId])
+model Folder {
+  id             String   @id @default(ulid())
+  name           String
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  parentFolderId String?
+  parentFolder   Folder?  @relation("parentChildFolders", fields: [parentFolderId], references: [id])
+  childFolder    Folder[] @relation("parentChildFolders")
+  files          File[]
+  creationDate   DateTime @default(now()) @db.Timestamptz(3)
+
+  @@unique([name, parentFolderId])
+  @@unique([id, userId])
 }
-model File{
-  id String @id @default(ulid())
-  name String
-  location String
-  size  Int
-  uploadTime DateTime @db.Timestamptz(3) @default(now())
-  folderId String
-  folder Folder @relation(fields: [folderId], references: [id])
-  userId String
-  user User @relation(fields: [userId], references: [id])
-  @@unique([name,userId,folderId])
+
+model File {
+  id         String   @id @default(ulid())
+  name       String
+  location   String
+  size       Int
+  uploadTime DateTime @default(now()) @db.Timestamptz(3)
+  folderId   String
+  folder     Folder   @relation(fields: [folderId], references: [id])
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@unique([name, userId, folderId])
 }

@@ -8,16 +8,36 @@ export async function getAllFolders(userId){
     })
 }
 
-export async function getFolderForPath(userId, path){
+export async function getFoldersForParent(userId, parentId = null){
     return await prisma.folder.findMany({
         where:{
-            userId: userId,
-            name: {
-                startsWith: path
+            userId:userId,
+            parentFolderId: parentId
+        }
+    })
+}
+
+export async function getFolderById(userId, id){
+    return await prisma.folder.findUnique({
+        where:{
+            id_userId:{
+                id:id,
+                userId:userId
             }
         }
     })
 }
+
+// export async function getFolderForPath(userId, path){
+//     return await prisma.folder.findMany({
+//         where:{
+//             userId: userId,
+//             name: {
+//                 startsWith: path
+//             }
+//         }
+//     })
+// }
 
 export async function getFolderByName(userId, name){
     return await prisma.folder.findUnique({
@@ -31,11 +51,21 @@ export async function getFolderByName(userId, name){
     })
 }
 
-export async function createFolder(userId,name){
+export async function createRootFolder(userId,name){
     return await prisma.folder.create({
         data:{
             name:name,
-            userId:userId
+            userId:userId,
+        }
+    })
+}
+
+export async function createChildFolder(userId,name,parentId){
+    return await prisma.folder.create({
+        data:{
+            name:name,
+            userId:userId,
+            parentFolderId: parentId
         }
     })
 }

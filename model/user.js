@@ -4,8 +4,8 @@ const userSelectFields = {
   id: true,
   email: true,
   creationDate: true,
-  files: true,
-  folders: true,
+  // files: true,
+  // folders: true,
 };
 
 const userSelectFieldsForAuth = {
