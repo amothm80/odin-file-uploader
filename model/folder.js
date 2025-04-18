@@ -8,6 +8,17 @@ export async function getAllFolders(userId){
     })
 }
 
+export async function getRootFolderForUser(userId){
+     await prisma.folder.findUnique({
+        where:{
+            name_parentFolderId:{
+                name: '',
+                parentFolderId: null,
+            }
+        }
+    })
+}
+
 export async function getFoldersForParent(userId, parentId = null){
     return await prisma.folder.findMany({
         where:{
