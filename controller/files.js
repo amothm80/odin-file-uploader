@@ -13,13 +13,15 @@ export async function serveFiles(req, res, next) {
     folderPath = req.params.folderPath.join("/");
   }
   console.log(`folder path = ${folderPath}`);
-
+  folderPath = folderPath.slice(-1) == '/' ? folderPath.slice(0,-1):folderPath;
   const folderDetails = await getFolderByName(req.user.id, folderPath);
-  console.log(folderDetails);
-  const pathFolders = await getFolderForPath(req.user.id, folderPath);
-  console.log(pathFolders);
+  //   console.log(folderDetails);
+  let pathFolders = await getFolderForPath(req.user.id, folderPath);
+//   console.log(" get files for folder: "+req.user.id+' ' +folderDetails)
   const files = await getFilesForFolder(req.user.id, folderDetails.id);
-  console.log(files);
+  //   console.log(files);
+//   console.log(pathFolders);
+
   res.locals.user = req.user;
   res.locals.folderDetails = folderDetails;
   res.locals.pathFolders = pathFolders;
@@ -29,14 +31,15 @@ export async function serveFiles(req, res, next) {
 
 export async function createFolder(req, res, next) {
   try {
-    if (req.body.folderName){
-        await createFolderDB(req.user.id,req,req.body.folderName)
-        res.redirect(String(req.get("Referrer")).replace("createFolder", ""));
-    }else{
-        throw new Error("Folder name is missing")
+    if (req.body.folderName) {
+        console.log(req.url)
+    //   await createFolderDB(req.user.id, req.body.folderName);
+      res.redirect(String(req.get("Referrer")).replace("createFolder", ""));
+    } else {
+      throw new Error("Folder name is missing");
     }
   } catch (err) {
-    console.log(err)
-    res.render('500')
+    console.log(err);
+    res.render("500");
   }
 }

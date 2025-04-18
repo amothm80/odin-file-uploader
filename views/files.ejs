@@ -13,8 +13,8 @@
     <td>
       <% if (pathFolder.name == folderDetails.name && pathFolder.name != ''){%>
       <a href="..">..</a>
-      <%}else{%>
-      <a href="<%= `${pathFolder.name}`%>"><%=pathFolder.name%></a>
+      <%}else{  %>
+      <a href="<%= `${pathFolder.name}/`%>"><%=pathFolder.name%></a>
       <%}%>
     </td>
   </tr>
