@@ -49,8 +49,9 @@ model Folder {
 model File {
   id         String   @id @default(ulid())
   name       String
-  location   String
-  size       Int
+  mimetype  String?
+  localfilename   String?
+  size       Int?
   uploadTime DateTime @default(now()) @db.Timestamptz(3)
   folderId   String
   folder     Folder   @relation(fields: [folderId], references: [id])

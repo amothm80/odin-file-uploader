@@ -1,18 +1,28 @@
-const modal = document.getElementById("createFolderDialog");
-const btn = document.getElementById("createFolderPop");
-const closeBtn = document.getElementById("cancel");
+const createFolderModal = document.getElementById("createFolderDialog");
+const createFolderButton = document.getElementById("createFolderPop");
+const createFolderCloseBtn = document.getElementById("cancelCreateFolder");
 
-btn.onclick = () => {
-  modal.style.display = "block";
+const uploadFileModal = document.getElementById("uploadFileDialog");
+const uploadFileButton = document.getElementById("uploadFilePop");
+const uploadFileCloseBtn = document.getElementById("cancelFileUpload");
+
+createFolderButton.onclick = () => {
+  createFolderModal.style.display = "block";
 }
 
-closeBtn.onclick = () => {
-  modal.style.display = "none";
+uploadFileButton.onclick = () => {
+  uploadFileModal.style.display = "block";
+}
+
+uploadFileCloseBtn.onclick = () => {
+  uploadFileModal.style.display = "none";
 }
 
 window.onclick = (event) => {
-  if (event.target === modal) {
-    modal.style.display = "none";
+  if (event.target === createFolderModal) {
+    createFolderModal.style.display = "none";
+  }
+  if (event.target === uploadFileModal) {
+    uploadFileModal.style.display = "none";
   }
 }
-console.log("hi")

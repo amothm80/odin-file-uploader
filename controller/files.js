@@ -1,11 +1,12 @@
 import {
   getFolderById,
-  getRootFolderForUser,
   getFoldersForParent,
   createChildFolder,
-  //   createFolder as createFolderDB,
 } from "../model/folder.js";
+import fs, { ReadStream } from 'fs'
 import { getFilesForFolder } from "../model/file.js";
+
+
 async function getFolderPath(userId, id) {
   let path = "";
   while (1) {
@@ -81,4 +82,31 @@ export async function createFolder(req, res, next) {
     console.log(err);
     res.render("500");
   }
+}
+
+export async function uploadFile(req,res,next){
+    console.log("body:");
+    console.log(req.body);
+    console.log("params:");
+  
+    console.log(req.params);
+    console.log("query:");
+  
+    console.log(req.query);
+    console.log("url:");
+
+    console.log(req.url);
+
+    console.log('file:')
+    console.log(req.file)
+    res.redirect(String(req.get("Referrer")).replace("uploadFile", ""));
+}
+
+export async function downloadFile(req,res,next){
+    // res.attachment("uploads/db7e753ba0a83eb2f6232d7fe2df17d0")
+    // rs.pipe(res)
+    // res.render('login-success')
+    // res.redirect(String(req.get("Referrer")).replace("downloadFile", ""));
+    res.set("Content-Disposition", 'attachment; filename="doc.pdf"');
+    res.sendFile("/home/ahmed/workspace/odinproject/odin-file-uploader/uploads/db7e753ba0a83eb2f6232d7fe2df17d0");
 }

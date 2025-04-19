@@ -2,6 +2,8 @@
 <script src="/js/files.js" defer></script>
 <h3>Files</h3>
 <button id="createFolderPop">Create Folder</button>
+<button id="uploadFilePop">Upload File</button>
+<a href="/downloadFile">Download File</a>
 <table>
   <tr>
     <th><%=path%></th>
@@ -41,7 +43,15 @@
     <label for="folderName">Folder Name</label>
     <input type="text" name="folderName" required>
     <button type="submit" id="submit">Submit</button>
-    <button type="button" id="cancel">Cancel</button>
+    <button type="button" id="cancelCreateFolder">Cancel</button>
   </form>
 </dialog>
+<dialog id="uploadFileDialog">
+  <form action="uploadFile?folderId=<%=folderDetails.id%>" method="post" enctype="multipart/form-data">
+    <label for="fileUpload">File Upload</label>
+    <input type="file" name="fileUpload" id="fileUpload">
+    <button type="submit" id="submit">Submit</button>
+    <button type="button" id="cancelFileUpload">Cancel</button>
+    </form>
+  </dialog>
 <%- include('./fragments/footer') %>
