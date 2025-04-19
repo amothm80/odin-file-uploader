@@ -5,4 +5,4 @@ export const filesRouter = express.Router();
 filesRouter.get("/files/", serveFiles);
 filesRouter.get("/files/*folderId", serveFiles);
 filesRouter.post("/files/createFolder",createFolder)
-filesRouter.post("/files/*folderId/createFolder",createFolder)
+// filesRouter.post("/files/*folderId/createFolder",createFolder)

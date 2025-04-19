@@ -2,7 +2,8 @@ import {
   getFolderById,
   getRootFolderForUser,
   getFoldersForParent,
-//   createFolder as createFolderDB,
+  createChildFolder,
+  //   createFolder as createFolderDB,
 } from "../model/folder.js";
 import { getFilesForFolder } from "../model/file.js";
 async function getFolderPath(userId, id) {
@@ -19,63 +20,65 @@ async function getFolderPath(userId, id) {
 }
 
 export async function serveFiles(req, res, next) {
-//   console.log(req.params);
-//   console.log(req.user.id);
-  let folderId = '';
+  console.log(req.params);
+  console.log(req.query);
+  //   console.log(req.user.id);
+  let folderId = "";
   const userId = req.user.id;
-  let folderDetails = ''
-  if (req.params.folderId){
-    folderId = req.params.folderId
-    folderDetails = await getFolderById(userId, folderId)
-  }else{
-    console.log(userId)
-    folderDetails = await getFoldersForParent(userId)
-    folderDetails = folderDetails[0]
-    console.log(folderDetails)
-    folderId = folderDetails.id
+  let folderDetails = "";
+  //   if (req.params.folderId){
+  if (req.query.folderId) {
+    // folderId = req.params.folderId[0]
+    folderId = req.query.folderId;
+    folderDetails = await getFolderById(userId, folderId);
+  } else {
+    folderDetails = await getFoldersForParent(userId);
+    folderDetails = folderDetails[0];
+    console.log(folderDetails);
+    folderId = folderDetails.id;
   }
-  if (!folderId){
-    throw new Error("Folder Id not found")
-  }else{
-
-    const pathFolders = await getFoldersForParent(userId,folderId)
-    const files = await getFilesForFolder(userId,folderId)
+  if (!folderId) {
+    throw new Error("Folder Id not found");
+  } else {
+    const childFolders = await getFoldersForParent(userId, folderId);
+    const files = await getFilesForFolder(userId, folderId);
+    const path = await getFolderPath(userId, folderId);
     res.locals.user = req.user;
+    res.locals.path = path ? path : "/";
+    console.log(folderDetails);
     res.locals.folderDetails = folderDetails;
-    res.locals.pathFolders = pathFolders;
+    res.locals.childFolders = childFolders;
     res.locals.files = files;
     res.render("files");
   }
-
-  //   const userId = req.user.id;
-  //   let folderPath = "";
-  //   if (req.params.folderPath) {
-  //     folderPath = req.params.folderPath.join("/");
-  //   }
-  //   console.log(`folder path = ${folderPath}`);
-  //   folderPath = folderPath.slice(-1) == '/' ? folderPath.slice(0,-1):folderPath;
-  //   const folderDetails = await getFolderByName(req.user.id, folderPath);
-  //   //   console.log(folderDetails);
-  // //   let pathFolders = await getFolderForPath(req.user.id, folderPath);
-  // //   console.log(" get files for folder: "+req.user.id+' ' +folderDetails)
-  //   const files = await getFilesForFolder(req.user.id, folderDetails.id);
-  //   //   console.log(files);
-  // //   console.log(pathFolders);
-
-
 }
 
 export async function createFolder(req, res, next) {
-//   try {
-//     if (req.body.folderName) {
-//       console.log(req.url);
-//       //   await createFolderDB(req.user.id, req.body.folderName);
-//       res.redirect(String(req.get("Referrer")).replace("createFolder", ""));
-//     } else {
-//       throw new Error("Folder name is missing");
-//     }
-//   } catch (err) {
-//     console.log(err);
-//     res.render("500");
-//   }
+  console.log("body:");
+  console.log(req.body);
+  console.log("params:");
+
+  console.log(req.params);
+  console.log("query:");
+
+  console.log(req.query);
+  try {
+    if (req.user.id,req.body.folderName,req.query.folderId) {
+      console.log("url:");
+
+      console.log(req.url);
+      await createChildFolder(
+        req.user.id,
+        req.body.folderName,
+        req.query.folderId
+      );
+
+      res.redirect(String(req.get("Referrer")).replace("createFolder", ""));
+    } else {
+      throw new Error("Folder details are missing");
+    }
+  } catch (err) {
+    console.log(err);
+    res.render("500");
+  }
 }
