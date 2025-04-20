@@ -50,6 +50,17 @@ export async function getFolderById(userId, id){
 //     })
 // }
 
+export async function getFolderByName_parentFolderId(name,parentFolderId){
+    return await prisma.folder.findUnique({
+        where:{
+            name_parentFolderId:{
+                name: name,
+                parentFolderId: parentFolderId
+            }
+        }
+    })
+}
+
 export async function getFolderByName(userId, name){
     return await prisma.folder.findUnique({
         where:{

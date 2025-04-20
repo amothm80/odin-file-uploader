@@ -3,7 +3,6 @@
 <h3>Files</h3>
 <button id="createFolderPop">Create Folder</button>
 <button id="uploadFilePop">Upload File</button>
-<a href="/downloadFile">Download File</a>
 <table>
   <tr>
     <th><%=path%></th>
@@ -32,16 +31,17 @@
   <% if (locals.files){
     for (let file of files){%>
   <tr>
-    <td><%=file.name%></td>
+    <td><a href="downloadFile?=<%=file.id%>"><%=file.name%></a> </td>
   </tr>
 
 
   <%}} %>
 </table>
 <dialog id="createFolderDialog">
-  <form action="createFolder?folderId=<%=folderDetails.id%>" method="post">
+  <form action="createFolder?folderId=<%=folderDetails.id%>" data-folderid="<%=folderDetails.id%>" method="post" id="createFolderForm">
     <label for="folderName">Folder Name</label>
-    <input type="text" name="folderName" required>
+    <input type="text" name="folderName" id="folderName" required>
+    <p id="createFolderError"></p>
     <button type="submit" id="submit">Submit</button>
     <button type="button" id="cancelCreateFolder">Cancel</button>
   </form>
@@ -49,7 +49,7 @@
 <dialog id="uploadFileDialog">
   <form action="uploadFile?folderId=<%=folderDetails.id%>" method="post" enctype="multipart/form-data">
     <label for="fileUpload">File Upload</label>
-    <input type="file" name="fileUpload" id="fileUpload">
+    <input type="file" name="fileUpload" id="fileUpload" required>
     <button type="submit" id="submit">Submit</button>
     <button type="button" id="cancelFileUpload">Cancel</button>
     </form>

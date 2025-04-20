@@ -2,10 +2,24 @@ import {
   getFolderById,
   getFoldersForParent,
   createChildFolder,
+  getFolderByName_parentFolderId
 } from "../model/folder.js";
-import fs, { ReadStream } from 'fs'
+import { body, matchedData, validationResult } from "express-validator";
 import { getFilesForFolder } from "../model/file.js";
 
+export const createFolderValidation = () =>{
+  return [
+    body("folderName")
+    .trim().isEmpty().withMessage("shoud be empty")
+    // .notEmpty().withMessage("Folder name cannot be empty")
+    // .custom(async (value , {req}) =>{
+    //   const folder = await getFolderByName_parentFolderId(value,req.query.folderId)
+    //   if (folder){
+    //     return Promise.reject("Folder name already taken in this directory")
+    //   }
+    // })
+  ]
+}
 
 async function getFolderPath(userId, id) {
   let path = "";
@@ -23,13 +37,10 @@ async function getFolderPath(userId, id) {
 export async function serveFiles(req, res, next) {
   console.log(req.params);
   console.log(req.query);
-  //   console.log(req.user.id);
   let folderId = "";
   const userId = req.user.id;
   let folderDetails = "";
-  //   if (req.params.folderId){
   if (req.query.folderId) {
-    // folderId = req.params.folderId[0]
     folderId = req.query.folderId;
     folderDetails = await getFolderById(userId, folderId);
   } else {
@@ -55,32 +66,37 @@ export async function serveFiles(req, res, next) {
 }
 
 export async function createFolder(req, res, next) {
-  console.log("body:");
-  console.log(req.body);
-  console.log("params:");
-
-  console.log(req.params);
-  console.log("query:");
-
-  console.log(req.query);
+ 
+  console.log("create folder function:")
   try {
-    if (req.user.id,req.body.folderName,req.query.folderId) {
-      console.log("url:");
+    const result = validationResult(req);
+    console.log("result:")
+    console.log(result)
+    if (req.user.id && result.isEmpty()) {
+      const data = matchedData(req);
+      console.log("data:") 
+      console.log( data)
+      // let result = await createChildFolder(
+      //   req.user.id,
+      //   data.folderName,
+      //   req.query.folderId
+      // );
+      // console.log("result:");
+      // console.log(result)
 
-      console.log(req.url);
-      await createChildFolder(
-        req.user.id,
-        req.body.folderName,
-        req.query.folderId
-      );
+      // res.redirect(String(req.get("Referrer")).replace("createFolder", ""));
+      res.json({success:true,message:"folder creation success"})
 
-      res.redirect(String(req.get("Referrer")).replace("createFolder", ""));
     } else {
       throw new Error("Folder details are missing");
     }
   } catch (err) {
+    console.log("error type:")
+    // console.log(typeof err)
     console.log(err);
-    res.render("500");
+    res.json({success:false,message:err.msg})
+
+    // res.render("500");
   }
 }
 
