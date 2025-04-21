@@ -5,7 +5,7 @@ import express from "express";
 // import { createUser } from "../model/user.js";
 import { authenticateRouter } from "./authenticate.js";
 import { registerRouter } from "./register.js";
-import { filesRouter } from "./files.js";
+import { directoryRouter } from "./directory.js";
 export const router = express.Router();
 
 router.get("/", (req, res, next) => {
@@ -40,4 +40,4 @@ router.use((req,res,next)=>{
 
 })
 
-router.use(filesRouter)
+router.use(directoryRouter)

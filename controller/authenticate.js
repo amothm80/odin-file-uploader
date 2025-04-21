@@ -35,7 +35,7 @@ export function postLogin(req, res, next) {
       if (err) {
         return next(err);
       }
-      return res.redirect(`files/`);
+      return res.redirect(`directory/`);
     });
   })(req, res, next);
 }

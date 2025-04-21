@@ -1,9 +1,9 @@
 <%- include('./fragments/head') %> <%- include('./fragments/header') %>
-<script src="/js/files.js" defer></script>
-<h3>Files</h3>
-<button id="createFolderPop">Create Folder</button>
+<script src="/js/directory.js" defer></script>
+<h3>Directory</h3>
+<button id="createFolderPop" data-folderid="<%=folderDetails.id%>">Create Folder</button>
 <button id="uploadFilePop">Upload File</button>
-<table>
+<table id="directoryTable">
   <tr>
     <th><%=path%></th>
   </tr>
@@ -23,6 +23,8 @@
     <td>
 
       <a href="<%= `?folderId=${childFolder.id}`%>"><%=childFolder.name%></a>
+      <button class="renameFolderPop" data-folderid="<%=childFolder.id%>">Rename Folder</button>
+      
     </td>
   </tr>
   <%}} %>
@@ -37,21 +39,21 @@
 
   <%}} %>
 </table>
-<dialog id="createFolderDialog">
-  <form action="createFolder?folderId=<%=folderDetails.id%>" data-folderid="<%=folderDetails.id%>" method="post" id="createFolderForm">
+<dialog id="folderDialog">
+  <form action="" data-folderid="<%=folderDetails.id%>" method="post" id="folderForm">
     <label for="folderName">Folder Name</label>
     <input type="text" name="folderName" id="folderName" required>
-    <p id="createFolderError"></p>
+    <p id="folderError"></p>
     <button type="submit" id="submit">Submit</button>
-    <button type="button" id="cancelCreateFolder">Cancel</button>
+    <button type="button" id="cancelFolderDialog">Cancel</button>
   </form>
 </dialog>
-<dialog id="uploadFileDialog">
+<dialog id="fileDialog">
   <form action="uploadFile?folderId=<%=folderDetails.id%>" method="post" enctype="multipart/form-data">
     <label for="fileUpload">File Upload</label>
     <input type="file" name="fileUpload" id="fileUpload" required>
     <button type="submit" id="submit">Submit</button>
-    <button type="button" id="cancelFileUpload">Cancel</button>
+    <button type="button" id="cancelFileDialog">Cancel</button>
     </form>
   </dialog>
 <%- include('./fragments/footer') %>
