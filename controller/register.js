@@ -59,8 +59,9 @@ export async function registerUser(req, res, next) {
       req.session.RegistrationSuccess = true;
       res.redirect("/login");
     } catch (err) {
-      console.log(err);
-      res.status(500).render("500");
+      throw err
+      // console.log(err);
+      // res.status(500).render("500");
     }
   } else {
     // console.log(req.body)

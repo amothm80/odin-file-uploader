@@ -8,6 +8,18 @@ export async function getFiles(userId){
     })
 }
 
+export async function getFileByName_userId_folderId(name,userId,folderId){
+    return await prisma.file.findUnique({
+        where:{
+            name_userId_folderId:{
+                name: name,
+                folderId: folderId,
+                userId: userId
+            }
+        }
+    })
+}
+
 export async function getFilesForFolder(userId, folderId){
     return await prisma.file.findMany({
         where:{
@@ -17,14 +29,15 @@ export async function getFilesForFolder(userId, folderId){
     })
 }
 
-export async function createFile(name,folderId,userId,fileData){
+export async function createFile(name,folderId,userId,mimetype,localfilename,size){
     return await prisma.file.create({
         data:{
             name:name,
+            mimetype: mimetype,
+            localfilename: localfilename,
+            size: size ,
             folderId:folderId,
             userId:userId,
-            location:'', //TODO
-            size: 0 //TODO
         }
     })
 }

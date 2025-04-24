@@ -6,8 +6,12 @@ import {
   getFolderByName_parentFolderId,
   renameFolder as renameFolderDb,
 } from "../model/folder.js";
+import { createFile } from "../model/file.js";
 import { body, matchedData, validationResult } from "express-validator";
-import { getFilesForFolder } from "../model/file.js";
+import {
+  getFilesForFolder,
+  getFileByName_userId_folderId,
+} from "../model/file.js";
 import { consoleLogReq } from "../lib/utils.js";
 
 export const folderNameValidation = () => {
@@ -31,8 +35,6 @@ export const folderNameValidation = () => {
 };
 
 export async function verifyFolderOwnership(req, res, next) {
-
-
   let folderId = null;
   if (req.query && req.query.folderId) {
     folderId = req.query.folderId;
@@ -78,8 +80,6 @@ async function getFolderPath(userId, id) {
 }
 
 export async function serveDirectory(req, res, next) {
-  console.log(req.params);
-  console.log(req.query);
   let folderId = "";
   const userId = req.user.id;
   let folderDetails = "";
@@ -89,7 +89,6 @@ export async function serveDirectory(req, res, next) {
   } else {
     folderDetails = await getFoldersForParent(userId);
     folderDetails = folderDetails[0];
-    console.log(folderDetails);
     folderId = folderDetails.id;
   }
   if (!folderId) {
@@ -138,16 +137,76 @@ export async function renameFolder(req, res, next) {
       res.json({ success: false, message: result.errors[0].msg });
     }
   } catch (err) {
-    console.log("Folder Rename Error:");
-    console.error(err);
-    res.render("500");
+    throw err;
+    // console.log("Folder Rename Error:");
+    // console.error(err);
+    // res.render("500");
+  }
+}
+
+export async function fileFilter(req, file, cb) {
+  /**
+   * 
+   * user:
+{
+  id: '01JS407V805P2RRHW6D8GJQ211',
+  email: 'charlie@example.com',
+  creationDate: 2025-04-18T08:28:59.008Z
+}
+params:
+[Object: null prototype] {}
+query:
+[Object: null prototype] { folderId: '01JS407V8HM69GZMPVRYG0FV90' }
+body:
+[Object: null prototype] {}
+file:
+undefined
+url:
+/directory/uploadFile?folderId=01JS407V8HM69GZMPVRYG0FV90
+{
+  fieldname: 'fileUpload',
+  originalname: 'impracticalpythonprojects.pdf',
+  encoding: '7bit',
+  mimetype: 'application/pdf'
+}
+   * 
+   */
+  const fileDb = await getFileByName_userId_folderId(
+    file.originalname,
+    req.user.id,
+    req.query.folderId
+  );
+
+  // console.log(fileDb)
+  if (fileDb) {
+    // cb(new Error("file exists"))
+    cb(null, false);
+  } else {
+    cb(null, true);
   }
 }
 
 export async function uploadFile(req, res, next) {
-  consoleLogReq(req)
-
-  res.redirect(String(req.get("Referrer")).replace("uploadFile", ""));
+  try {
+    if (req.file) {
+      createFile(
+        req.file.originalname,
+        req.query.folderId,
+        req.user.id,
+        req.file.mimetype,
+        req.file.filename,
+        req.file.size
+      );
+      res.redirect(String(req.get("Referrer")).replace("uploadFile", ""));
+    } else {
+      res.json({
+        success: false,
+        message: "File already exists in this folder",
+      });
+    }
+  } catch (err) {
+    throw err;
+  }
 }
 
 export async function downloadFile(req, res, next) {

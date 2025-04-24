@@ -6,11 +6,12 @@ import {
   downloadFile,
   folderNameValidation,
   renameFolder,
-  verifyFolderOwnership
+  verifyFolderOwnership,
+  fileFilter
 } from "../controller/directory.js";
 import multer from "multer";
 
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "uploads/",fileFilter: fileFilter });
 
 export const directoryRouter = express.Router();
 
