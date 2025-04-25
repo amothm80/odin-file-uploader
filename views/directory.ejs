@@ -23,9 +23,10 @@
     <td>
 
       <a href="<%= `?folderId=${childFolder.id}`%>"><%=childFolder.name%></a>
-      <button class="renameFolderPop" data-folderid="<%=childFolder.id%>">Rename Folder</button>
-      
     </td>
+    <td> <button class="renameFolderPop" data-folderid="<%=childFolder.id%>">Rename Folder</button></td>
+
+
   </tr>
   <%}} %>
 
@@ -33,27 +34,40 @@
   <% if (locals.files){
     for (let file of files){%>
   <tr>
-    <td><a href="downloadFile?=<%=file.id%>"><%=file.name%></a> </td>
+    <td>
+      <a href="downloadFile?=<%=file.id%>"><%=file.name%></a>
+    </td>
+    <td>
+      <button class="deleteFilePop" data-fileid="<%=file.id%>">Delete File</button>
+    </td>
   </tr>
 
 
   <%}} %>
 </table>
-<dialog id="folderDialog">
-  <form action="" data-folderid="<%=folderDetails.id%>" method="post" id="folderForm">
+<dialog id="dialog">
+<!--<dialog id="folderDialog">-->
+  <form action="" data-folderid="" method="post" id="folderForm">
     <label for="folderName">Folder Name</label>
     <input type="text" name="folderName" id="folderName" required>
     <p id="folderError"></p>
     <button type="submit" id="submit">Submit</button>
     <button type="button" id="cancelFolderDialog">Cancel</button>
   </form>
-</dialog>
-<dialog id="fileDialog">
-  <form action="uploadFile?folderId=<%=folderDetails.id%>" method="post" enctype="multipart/form-data">
+<!--</dialog>
+<dialog id="fileDialog">-->
+  <form action="uploadFile?folderId=<%=folderDetails.id%>" method="post" enctype="multipart/form-data" id="fileForm">
     <label for="fileUpload">File Upload</label>
     <input type="file" name="fileUpload" id="fileUpload" required>
     <button type="submit" id="submit">Submit</button>
     <button type="button" id="cancelFileDialog">Cancel</button>
-    </form>
-  </dialog>
+  </form>
+<!--</dialog>
+<dialog id="confirmDialog">-->
+  <form action="" data-fileId="" method="" post id="confirmForm">
+    <p id="confirmationText"></p>
+    <button type="submit">Confirm</button>
+    <button type="button" id="cancelConfirmDialog">Cancel</button>
+  </form>
+</dialog>
 <%- include('./fragments/footer') %>
