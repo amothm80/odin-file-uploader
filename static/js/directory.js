@@ -1,52 +1,81 @@
 const directoryTable = document.getElementById("directoryTable");
 
-// const folderModal = document.getElementById("folderDialog");
-const folderModal = document.getElementById("dialog");
-const createFolderButton = document.getElementById("createFolderPop");
+const modal = document.getElementById("dialog");
 
+//Folder Form
+const createFolderButton = document.getElementById("createFolderPop");
 const folderCloseBtn = document.getElementById("cancelFolderDialog");
 const folderForm = document.getElementById("folderForm");
 const folderErrorMessage = document.getElementById("folderError");
 
-// const uploadFileModal = document.getElementById("fileDialog");
-const uploadFileModal = document.getElementById("dialog");
+//Upload Form
 const uploadFileButton = document.getElementById("uploadFilePop");
 const uploadFileCloseBtn = document.getElementById("cancelFileDialog");
-const uploadFileForm = document.getElementById("fileForm")
+const uploadFileForm = document.getElementById("fileForm");
 
-// const confirmModal = document.getElementById("confirmDialog");
-const confirmModal = document.getElementById("dialog");
+//Confirm Form
 const confirmButton = document.getElementById("deleteFilePop");
 const confirmCloseBtn = document.getElementById("cancelConfirmDialog");
 const confirmForm = document.getElementById("confirmForm");
 const confirmMessage = document.getElementById("confirmationText");
 
+//Messages
+const messageDiv = document.getElementById("messages");
+const messageText = document.getElementById("messageText");
+const closeMessageBtn = document.getElementById("closeMessage")
 
-function enableFolderForm(){
-  folderForm.style.display = 'block'
-  uploadFileForm.style.display = 'none';
-  confirmForm.style.display = 'none'
+function enableFolderForm() {
+  modal.style.display = "block";
+  folderForm.style.display = "block";
+  uploadFileForm.style.display = "none";
+  confirmForm.style.display = "none";
+  messageDiv.style.display = "none";
+  messageText.textContent = "";
+  messageText.className = "";
 }
 
-function enableUploadForm(){
-  folderForm.style.display = 'none'
-  uploadFileForm.style.display = 'block';
-  confirmForm.style.display = 'none'
+function enableUploadForm() {
+  modal.style.display = "block";
+  folderForm.style.display = "none";
+  uploadFileForm.style.display = "block";
+  confirmForm.style.display = "none";
+  messageDiv.style.display = "none";
+  messageText.textContent = "";
+  messageText.className = "";
 }
 
-function enableConfirmForm(){
-  folderForm.style.display = 'none'
-  uploadFileForm.style.display = 'none';
-  confirmForm.style.display = 'block'
+function enableConfirmForm() {
+  modal.style.display = "block";
+  folderForm.style.display = "none";
+  uploadFileForm.style.display = "none";
+  confirmForm.style.display = "block";
+  messageDiv.style.display = "none";
+
+  messageText.textContent = "";
+  messageText.className = "";
 }
-function disableForms(){
-  folderForm.style.display = 'none'
-  uploadFileForm.style.display = 'none';
-  confirmForm.style.display = 'none'
+
+function enableMessages(messageType, messageText) {
+  modal.style.display = "block";
+  folderForm.style.display = "none";
+  uploadFileForm.style.display = "none";
+  confirmForm.style.display = "none";
+  messageDiv.style.display = "block";
+
+  messageText.textContent = messageText;
+  messageText.className = messageType;
 }
 
+function disableForms() {
+  folderForm.style.display = "none";
+  uploadFileForm.style.display = "none";
+  confirmForm.style.display = "none";
+  messageDiv.style.display = "none";
+  modal.style.display = "none";
 
+}
 
+//create folder routine
 folderForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const target = e.target;
@@ -63,8 +92,7 @@ folderForm.addEventListener("submit", async (e) => {
     const result = await response.json();
     console.log(result);
     if (result.success) {
-      folderModal.style.display = "none";
-      disableForms()
+      disableForms();
       location.reload();
     } else {
       folderErrorMessage.textContent = result.message;
@@ -76,75 +104,71 @@ folderForm.addEventListener("submit", async (e) => {
   }
 });
 
-confirmForm.addEventListener("submit", async (e) =>{
-  e.preventDefault()
+//confirmation routine
+confirmForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
   const target = e.target;
-  const url= target.action + target.dataset.fileid;
-try{
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({fileId: target.dataset.fileid})
-  })
-  const result = await response.json();
-  if (result.success){
-    confirmModal.style.display = 'none';
-    disableForms()
-    location.reload();
-
+  const url = target.action + target.dataset.fileid;
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ fileId: target.dataset.fileid }),
+    });
+    const result = await response.json();
+    if (result.success) {
+      disableForms();
+      location.reload();
+    } else {
+      enableMessages("error", result.message);
+    }
+  } catch {
+    enableMessages("error", "An unexpected error has occured");
   }
-}catch{}
 
-  confirmModal.style.display = 'none'
-})
+  // modal.style.display = "none";
+});
 
 /** -----------------------------DIALOG CONTROLS--------------------------- */
 createFolderButton.onclick = (e) => {
   folderForm.action = "createFolder?folderId=";
   folderForm.dataset.folderid = e.target.dataset.folderid;
   enableFolderForm();
-  folderModal.style.display = "block";
-  
 };
 
 // renameFolderButton.onclick = (e) => {
 //   folderForm.action = 'renameFolder?folderId='
 //   folderForm.dataset.folderid = e.target.dataset.folderid
-//   folderModal.style.display = "block";
+//   modal.style.display = "block";
 // }
 
 uploadFileButton.onclick = () => {
-  enableUploadForm()
-  uploadFileModal.style.display = "block";
+  enableUploadForm();
 };
 folderCloseBtn.onclick = () => {
   folderForm.action = "";
   folderForm.dataset.folderid = "";
-  folderModal.style.display = "none";
-  disableForms()
+  disableForms();
 };
-confirmCloseBtn.onclick= () =>{
-  confirmForm.action = '';
-  confirmForm.dataset.fileid = '';
-  confirmModal.style.display = 'none';
+confirmCloseBtn.onclick = () => {
+  confirmForm.action = "";
+  confirmForm.dataset.fileid = "";
+  disableForms();
+};
+
+uploadFileCloseBtn.onclick = () => {
+  disableForms();
+};
+
+closeMessageBtn.onclick = () => {
   disableForms()
 }
 
-uploadFileCloseBtn.onclick = () => {
-  uploadFileModal.style.display = "none";
-  disableForms()
-};
-
 window.onclick = (event) => {
-  if (event.target === folderModal) {
-    folderModal.style.display = "none";
-    disableForms()
-  }
-  if (event.target === uploadFileModal) {
-    uploadFileModal.style.display = "none";
-    disableForms()
+  if (event.target === modal) {
+    disableForms();
   }
 };
 
@@ -154,14 +178,12 @@ directoryTable.addEventListener("click", (e) => {
     case "renameFolderPop":
       folderForm.action = "renameFolder?folderId=";
       folderForm.dataset.folderid = e.target.dataset.folderid;
-      enableFolderForm()
-      folderModal.style.display = "block";
+      enableFolderForm();
       break;
     case "deleteFilePop":
       confirmForm.action = "deleteFile?fileId=";
       confirmForm.dataset.fileid = e.target.dataset.fileid;
-      enableConfirmForm()
-      confirmModal.style.display = "block";
+      enableConfirmForm();
       confirmMessage.textContent = "Are you sure you want to delete the file?";
       break;
   }

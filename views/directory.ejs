@@ -46,7 +46,7 @@
   <%}} %>
 </table>
 <dialog id="dialog">
-<!--<dialog id="folderDialog">-->
+  <!--<dialog id="folderDialog">-->
   <form action="" data-folderid="" method="post" id="folderForm">
     <label for="folderName">Folder Name</label>
     <input type="text" name="folderName" id="folderName" required>
@@ -54,7 +54,7 @@
     <button type="submit" id="submit">Submit</button>
     <button type="button" id="cancelFolderDialog">Cancel</button>
   </form>
-<!--</dialog>
+  <!--</dialog>
 <dialog id="fileDialog">-->
   <form action="uploadFile?folderId=<%=folderDetails.id%>" method="post" enctype="multipart/form-data" id="fileForm">
     <label for="fileUpload">File Upload</label>
@@ -62,12 +62,16 @@
     <button type="submit" id="submit">Submit</button>
     <button type="button" id="cancelFileDialog">Cancel</button>
   </form>
-<!--</dialog>
+  <!--</dialog>
 <dialog id="confirmDialog">-->
   <form action="" data-fileId="" method="" post id="confirmForm">
     <p id="confirmationText"></p>
     <button type="submit">Confirm</button>
     <button type="button" id="cancelConfirmDialog">Cancel</button>
   </form>
+  <div id="messages">
+    <p id="messageText"></p>
+    <button id="closeMessage">Close</button>
+  </div>
 </dialog>
 <%- include('./fragments/footer') %>
