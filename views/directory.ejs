@@ -54,16 +54,13 @@
     <button type="submit" id="submit">Submit</button>
     <button type="button" id="cancelFolderDialog">Cancel</button>
   </form>
-  <!--</dialog>
-<dialog id="fileDialog">-->
   <form action="uploadFile?folderId=<%=folderDetails.id%>" method="post" enctype="multipart/form-data" id="fileForm">
     <label for="fileUpload">File Upload</label>
     <input type="file" name="fileUpload" id="fileUpload" required>
     <button type="submit" id="submit">Submit</button>
     <button type="button" id="cancelFileDialog">Cancel</button>
   </form>
-  <!--</dialog>
-<dialog id="confirmDialog">-->
+
   <form action="" data-fileId="" method="" post id="confirmForm">
     <p id="confirmationText"></p>
     <button type="submit">Confirm</button>

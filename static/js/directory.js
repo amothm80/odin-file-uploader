@@ -14,7 +14,7 @@ const uploadFileCloseBtn = document.getElementById("cancelFileDialog");
 const uploadFileForm = document.getElementById("fileForm");
 
 //Confirm Form
-const confirmButton = document.getElementById("deleteFilePop");
+// const confirmButton = document.getElementById("deleteFilePop");
 const confirmCloseBtn = document.getElementById("cancelConfirmDialog");
 const confirmForm = document.getElementById("confirmForm");
 const confirmMessage = document.getElementById("confirmationText");
@@ -25,7 +25,8 @@ const messageText = document.getElementById("messageText");
 const closeMessageBtn = document.getElementById("closeMessage")
 
 function enableFolderForm() {
-  modal.style.display = "block";
+  // modal.style.display = "block";
+  modal.showModal();
   folderForm.style.display = "block";
   uploadFileForm.style.display = "none";
   confirmForm.style.display = "none";
@@ -35,7 +36,8 @@ function enableFolderForm() {
 }
 
 function enableUploadForm() {
-  modal.style.display = "block";
+  // modal.style.display = "block";
+  modal.showModal();
   folderForm.style.display = "none";
   uploadFileForm.style.display = "block";
   confirmForm.style.display = "none";
@@ -45,7 +47,8 @@ function enableUploadForm() {
 }
 
 function enableConfirmForm() {
-  modal.style.display = "block";
+  // modal.style.display = "block";
+  modal.showModal();
   folderForm.style.display = "none";
   uploadFileForm.style.display = "none";
   confirmForm.style.display = "block";
@@ -55,15 +58,16 @@ function enableConfirmForm() {
   messageText.className = "";
 }
 
-function enableMessages(messageType, messageText) {
-  modal.style.display = "block";
+function enableMessages(type, text) {
+  // modal.style.display = "block";
+  // modal.showModal();
   folderForm.style.display = "none";
   uploadFileForm.style.display = "none";
   confirmForm.style.display = "none";
   messageDiv.style.display = "block";
 
-  messageText.textContent = messageText;
-  messageText.className = messageType;
+  messageText.textContent = text;
+  messageText.className = type;
 }
 
 function disableForms() {
@@ -71,8 +75,8 @@ function disableForms() {
   uploadFileForm.style.display = "none";
   confirmForm.style.display = "none";
   messageDiv.style.display = "none";
-  modal.style.display = "none";
-
+  // modal.style.display = "none";
+  modal.close("close modal")
 }
 
 //create folder routine
@@ -122,7 +126,7 @@ confirmForm.addEventListener("submit", async (e) => {
       disableForms();
       location.reload();
     } else {
-      enableMessages("error", result.message);
+      // enableMessages("error", result.message);
     }
   } catch {
     enableMessages("error", "An unexpected error has occured");
@@ -166,11 +170,11 @@ closeMessageBtn.onclick = () => {
   disableForms()
 }
 
-window.onclick = (event) => {
-  if (event.target === modal) {
-    disableForms();
-  }
-};
+// window.onclick = (event) => {
+//   if (event.target === modal) {
+//     disableForms();
+//   }
+// };
 
 directoryTable.addEventListener("click", (e) => {
   console.log(e.target.className);
