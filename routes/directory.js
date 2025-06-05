@@ -21,5 +21,5 @@ directoryRouter.get("/directory/", serveDirectory);
 directoryRouter.post("/directory/createFolder", folderNameValidation(), createFolder);
 directoryRouter.post("/directory/renameFolder", folderNameValidation(), renameFolder);
 directoryRouter.post("/directory/uploadFile", upload.single("fileUpload"), uploadFile);
-directoryRouter.get("/downloadFile", downloadFile);
+directoryRouter.get("/directory/downloadFile", downloadFile);
 // directoryRouter.post("/directory/*folderId/createFolder",createFolder)

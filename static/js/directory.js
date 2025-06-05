@@ -22,7 +22,7 @@ const confirmMessage = document.getElementById("confirmationText");
 //Messages
 const messageDiv = document.getElementById("messages");
 const messageText = document.getElementById("messageText");
-const closeMessageBtn = document.getElementById("closeMessage")
+const closeMessageBtn = document.getElementById("closeMessage");
 
 function enableFolderForm() {
   // modal.style.display = "block";
@@ -75,8 +75,11 @@ function disableForms() {
   uploadFileForm.style.display = "none";
   confirmForm.style.display = "none";
   messageDiv.style.display = "none";
+  folderErrorMessage.textContent = "";
+  folderErrorMessage.style.display = "none";
   // modal.style.display = "none";
-  modal.close("close modal")
+  console.log("modal close");
+  modal.close("close modal");
 }
 
 //create folder routine
@@ -167,8 +170,8 @@ uploadFileCloseBtn.onclick = () => {
 };
 
 closeMessageBtn.onclick = () => {
-  disableForms()
-}
+  disableForms();
+};
 
 // window.onclick = (event) => {
 //   if (event.target === modal) {

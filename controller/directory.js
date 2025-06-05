@@ -137,10 +137,11 @@ export async function renameFolder(req, res, next) {
       res.json({ success: false, message: result.errors[0].msg });
     }
   } catch (err) {
-    throw err;
-    // console.log("Folder Rename Error:");
-    // console.error(err);
+
+    console.log("Folder Rename Error:");
+    console.error(err);
     // res.render("500");
+    throw err
   }
 }
 
@@ -210,6 +211,7 @@ export async function uploadFile(req, res, next) {
 }
 
 export async function downloadFile(req, res, next) {
+  console.log("DOWNLOAD FILE")
   // res.attachment("uploads/db7e753ba0a83eb2f6232d7fe2df17d0")
   // rs.pipe(res)
   // res.render('login-success')
