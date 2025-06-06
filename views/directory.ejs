@@ -35,7 +35,7 @@
     for (let file of files){%>
   <tr>
     <td>
-      <a href="downloadFile?=<%=file.id%>"><%=file.name%></a>
+      <a href="downloadFile?fileId=<%=file.id%>"><%=file.name%></a>
     </td>
     <td>
       <button class="deleteFilePop" data-fileid="<%=file.id%>">Delete File</button>
@@ -46,7 +46,6 @@
   <%}} %>
 </table>
 <dialog id="dialog">
-  <!--<dialog id="folderDialog">-->
   <form action="" data-folderid="" method="post" id="folderForm">
     <label for="folderName">Folder Name</label>
     <input type="text" name="folderName" id="folderName" required>

@@ -140,7 +140,7 @@ confirmForm.addEventListener("submit", async (e) => {
 
 /** -----------------------------DIALOG CONTROLS--------------------------- */
 createFolderButton.onclick = (e) => {
-  folderForm.action = "createFolder?folderId=";
+  folderForm.action = "createFolder?parentFolderId=";
   folderForm.dataset.folderid = e.target.dataset.folderid;
   enableFolderForm();
 };

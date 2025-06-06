@@ -1,5 +1,13 @@
 import { prisma } from "../config/database.js";
 
+export async function getFileById(fileId){
+    return await prisma.file.findUnique({
+        where:{
+            id: fileId
+        }
+    })
+}
+
 export async function getFiles(userId){
     return await prisma.file.findMany({
         where:{

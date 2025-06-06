@@ -6,13 +6,17 @@ import {
   getFolderByName_parentFolderId,
   renameFolder as renameFolderDb,
 } from "../model/folder.js";
-import { createFile } from "../model/file.js";
 import { body, matchedData, validationResult } from "express-validator";
 import {
+  createFile,
+  getFileById,
   getFilesForFolder,
   getFileByName_userId_folderId,
+  deleteFile as deleteFileDb,
 } from "../model/file.js";
+import { getFileLocation } from "../lib/utils.js";
 import { consoleLogReq } from "../lib/utils.js";
+import fs from "fs";
 
 export const folderNameValidation = () => {
   // return
@@ -22,9 +26,16 @@ export const folderNameValidation = () => {
       .notEmpty()
       .withMessage("Folder name cannot be empty")
       .custom(async (value, { req }) => {
+        let parentFolderId;
+        if (!req.query.parentFolderId) {
+          const folder = await getFolderById(req.query.folderId);
+          parentFolderId = folder.parentFolderId;
+        } else {
+          parentFolderId = req.query.parentFolderId;
+        }
         const folder = await getFolderByName_parentFolderId(
           value,
-          req.query.folderId
+          parentFolderId
         );
         if (folder) {
           throw new Error("Folder already exists in this directory");
@@ -110,6 +121,8 @@ export async function serveDirectory(req, res, next) {
 export async function createFolder(req, res, next) {
   try {
     const result = validationResult(req);
+    console.log(result);
+
     if (req.user.id && result.isEmpty()) {
       const data = matchedData(req);
       await createChildFolder(req.user.id, data.folderName, req.query.folderId);
@@ -129,6 +142,7 @@ export async function createFolder(req, res, next) {
 export async function renameFolder(req, res, next) {
   try {
     const result = validationResult(req);
+    console.log(result);
     if (result.isEmpty()) {
       const data = matchedData(req);
       await renameFolderDb(req.query.folderId, data.folderName);
@@ -137,11 +151,10 @@ export async function renameFolder(req, res, next) {
       res.json({ success: false, message: result.errors[0].msg });
     }
   } catch (err) {
-
     console.log("Folder Rename Error:");
     console.error(err);
     // res.render("500");
-    throw err
+    throw err;
   }
 }
 
@@ -211,13 +224,41 @@ export async function uploadFile(req, res, next) {
 }
 
 export async function downloadFile(req, res, next) {
-  console.log("DOWNLOAD FILE")
+  console.log("DOWNLOAD FILE");
+  const file = await getFileById(req.query.fileId);
+  console.log("file ID: ");
+  console.log(file);
+  const fileLocation = getFileLocation(file.localfilename);
+  res.set("Content-Disposition", `attachment; filename=${file.name}`);
+  res.sendFile(fileLocation);
   // res.attachment("uploads/db7e753ba0a83eb2f6232d7fe2df17d0")
   // rs.pipe(res)
   // res.render('login-success')
   // res.redirect(String(req.get("Referrer")).replace("downloadFile", ""));
-  res.set("Content-Disposition", 'attachment; filename="doc.pdf"');
-  res.sendFile(
-    "/home/ahmed/workspace/odinproject/odin-file-uploader/uploads/db7e753ba0a83eb2f6232d7fe2df17d0"
-  );
+  // res.set("Content-Disposition", 'attachment; filename="doc.pdf"');
+  // res.sendFile(
+  //   "/home/ahmed/workspace/odinproject/odin-file-uploader/uploads/db7e753ba0a83eb2f6232d7fe2df17d0"
+  // );
+}
+
+export async function deleteFile(req, res, next) {
+  try {
+    console.log("to be deleted file id: ");
+    console.log(req.query.fileId);
+    const file = await getFileById(req.query.fileId);
+    const fileLocation = getFileLocation(file.localfilename);
+    fs.unlink(fileLocation, async (err) => {
+      if (err) console.log(err);
+      else {
+        await deleteFileDb(file.id);
+        console.log("\nDeleted file: example_file.txt");
+      }
+    });
+    res.json({ success: true, message: "Folder Deleted" });
+  } catch (err) {
+    console.log("Folder Delete Error:");
+    console.error(err);
+    // res.render("500");
+    throw err;
+  }
 }
