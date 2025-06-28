@@ -8,7 +8,8 @@ import {
   renameFolder,
   verifyFolderOwnership,
   fileFilter,
-  deleteFile
+  deleteFile,
+  deleteFolder
 } from "../controller/directory.js";
 import multer from "multer";
 
@@ -23,5 +24,6 @@ directoryRouter.post("/directory/createFolder", folderNameValidation(), createFo
 directoryRouter.post("/directory/renameFolder", folderNameValidation(), renameFolder);
 directoryRouter.post("/directory/uploadFile", upload.single("fileUpload"), uploadFile);
 directoryRouter.post("/directory/deleteFile", deleteFile)
+directoryRouter.post("/directory/deleteFolder", deleteFolder)
 directoryRouter.get("/directory/downloadFile", downloadFile);
 // directoryRouter.post("/directory/*folderId/createFolder",createFolder)

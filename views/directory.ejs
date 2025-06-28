@@ -25,6 +25,7 @@
       <a href="<%= `?folderId=${childFolder.id}`%>"><%=childFolder.name%></a>
     </td>
     <td> <button class="renameFolderPop" data-folderid="<%=childFolder.id%>">Rename Folder</button></td>
+    <td> <button class="deleteFolderPop" data-folderid="<%=childFolder.id%>">Delete Folder</button></td>
 
 
   </tr>
@@ -60,7 +61,7 @@
     <button type="button" id="cancelFileDialog">Cancel</button>
   </form>
 
-  <form action="" data-fileId="" method="" post id="confirmForm">
+  <form action="" data-fileId="" data-folderid="" method="" post id="confirmForm">
     <p id="confirmationText"></p>
     <button type="submit">Confirm</button>
     <button type="button" id="cancelConfirmDialog">Cancel</button>

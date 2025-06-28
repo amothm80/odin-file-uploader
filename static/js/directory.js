@@ -187,6 +187,12 @@ directoryTable.addEventListener("click", (e) => {
       folderForm.dataset.folderid = e.target.dataset.folderid;
       enableFolderForm();
       break;
+    case "deleteFolderPop":
+      confirmForm.action = "deleteFolder?folderID=";
+      confirmForm.dataset.folderid = e.target.dataset.folderid;
+      enableConfirmForm();
+      confirmMessage.textContent = "Are you sure you want to delete the folder and all it's contents?";
+      break;
     case "deleteFilePop":
       confirmForm.action = "deleteFile?fileId=";
       confirmForm.dataset.fileid = e.target.dataset.fileid;

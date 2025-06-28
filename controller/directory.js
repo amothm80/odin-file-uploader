@@ -241,24 +241,41 @@ export async function downloadFile(req, res, next) {
   // );
 }
 
+async function deleteUnlinkFile(fileId) {
+  const file = await getFileById(fileId);
+  const fileLocation = getFileLocation(file.localfilename);
+  fs.unlink(fileLocation, async (err) => {
+    if (err) console.log(err);
+    else {
+      await deleteFileDb(file.id);
+    }
+  });
+}
+
 export async function deleteFile(req, res, next) {
   try {
     console.log("to be deleted file id: ");
     console.log(req.query.fileId);
-    const file = await getFileById(req.query.fileId);
-    const fileLocation = getFileLocation(file.localfilename);
-    fs.unlink(fileLocation, async (err) => {
-      if (err) console.log(err);
-      else {
-        await deleteFileDb(file.id);
-        console.log("\nDeleted file: example_file.txt");
-      }
-    });
-    res.json({ success: true, message: "Folder Deleted" });
+    deleteUnlinkFile(req.query.fileId)
+    res.json({ success: true, message: "File Deleted" });
   } catch (err) {
-    console.log("Folder Delete Error:");
+    console.log("File Delete Error:");
     console.error(err);
     // res.render("500");
+    throw err;
+  }
+}
+
+export async function deleteFolder(req, res, next) {
+  try {
+    console.log("DELETE FOLDER METHOD")
+    const folderID = req.query.folderId;
+    const files = getFilesForFolder(req.user.id,folderID)
+    for (const file in files){
+      console.log(file)
+    }
+    res.json({success:true, message:"Folder Deleted"})
+  } catch (err) {
     throw err;
   }
 }
