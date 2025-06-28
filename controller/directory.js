@@ -269,11 +269,15 @@ export async function deleteFile(req, res, next) {
 export async function deleteFolder(req, res, next) {
   try {
     console.log("DELETE FOLDER METHOD")
-    const folderID = req.query.folderId;
-    const files = getFilesForFolder(req.user.id,folderID)
-    for (const file in files){
-      console.log(file)
-    }
+    const folderId = req.query.folderId;
+    console.log("FOLDER ID :"+folderId)
+    const folders = await getFoldersForParent(req.user.id, folderId)
+    const files = await getFilesForFolder(req.user.id,folderId)
+    console.log(files)
+    console.log(folders)
+    // for (const file in files){
+    //   console.log(file)
+    // }
     res.json({success:true, message:"Folder Deleted"})
   } catch (err) {
     throw err;

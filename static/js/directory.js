@@ -78,7 +78,6 @@ function disableForms() {
   folderErrorMessage.textContent = "";
   folderErrorMessage.style.display = "none";
   // modal.style.display = "none";
-  console.log("modal close");
   modal.close("close modal");
 }
 
@@ -97,7 +96,7 @@ folderForm.addEventListener("submit", async (e) => {
       body: JSON.stringify({ folderName }),
     });
     const result = await response.json();
-    console.log(result);
+    // console.log(result);
     if (result.success) {
       disableForms();
       location.reload();
@@ -112,22 +111,43 @@ folderForm.addEventListener("submit", async (e) => {
 });
 
 //confirmation routine
+//TODO add file routine
 confirmForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const target = e.target;
-  const url = target.action + target.dataset.fileid;
+  const action = e.target.action;
+  const fileid = e.target.dataset.fileid;
+  const folderid = e.target.dataset.folderid;
+  const name = e.target.name;
+  console.log(target);
+  let url = "";
+  if (name == "deleteFolderForm") {
+    url = target.action + target.dataset.folderid;
+  }
+  if (name == "deleteFileForm") {
+    url = target.action + target.dataset.fileid;
+  }
+
   try {
+    let body = "";
+    if ((name == "deleteFolderForm")) {
+      body = JSON.stringify({ fileId: target.dataset.folderid });
+    }
+    if ((name == "deleteFileForm")) {
+      body = JSON.stringify({ fileId: target.dataset.fileid });
+    }
+
     const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ fileId: target.dataset.fileid }),
+      body: body,
     });
     const result = await response.json();
     if (result.success) {
       disableForms();
-      location.reload();
+      // location.reload();
     } else {
       // enableMessages("error", result.message);
     }
@@ -180,22 +200,26 @@ closeMessageBtn.onclick = () => {
 // };
 
 directoryTable.addEventListener("click", (e) => {
-  console.log(e.target.className);
+  // console.log(e.target.className);
   switch (e.target.className) {
     case "renameFolderPop":
       folderForm.action = "renameFolder?folderId=";
       folderForm.dataset.folderid = e.target.dataset.folderid;
+      folderForm.name = "renameFolderForm";
       enableFolderForm();
       break;
     case "deleteFolderPop":
-      confirmForm.action = "deleteFolder?folderID=";
+      confirmForm.action = "deleteFolder?folderId=";
       confirmForm.dataset.folderid = e.target.dataset.folderid;
+      confirmForm.name = "deleteFolderForm";
       enableConfirmForm();
-      confirmMessage.textContent = "Are you sure you want to delete the folder and all it's contents?";
+      confirmMessage.textContent =
+        "Are you sure you want to delete the folder and all it's contents?";
       break;
     case "deleteFilePop":
       confirmForm.action = "deleteFile?fileId=";
       confirmForm.dataset.fileid = e.target.dataset.fileid;
+      confirmForm.name = "deleteFileForm";
       enableConfirmForm();
       confirmMessage.textContent = "Are you sure you want to delete the file?";
       break;
