@@ -147,9 +147,9 @@ confirmForm.addEventListener("submit", async (e) => {
     const result = await response.json();
     if (result.success) {
       disableForms();
-      // location.reload();
+      location.reload();
     } else {
-      // enableMessages("error", result.message);
+      enableMessages("error", result.message);
     }
   } catch {
     enableMessages("error", "An unexpected error has occured");

@@ -5,6 +5,7 @@ import {
   createChildFolder,
   getFolderByName_parentFolderId,
   renameFolder as renameFolderDb,
+  deleteFolder as deleteFolderDb,
 } from "../model/folder.js";
 import { body, matchedData, validationResult } from "express-validator";
 import {
@@ -125,7 +126,9 @@ export async function createFolder(req, res, next) {
 
     if (req.user.id && result.isEmpty()) {
       const data = matchedData(req);
-      await createChildFolder(req.user.id, data.folderName, req.query.folderId);
+      console.log("data:")
+      console.log(data)
+      console.log(await createChildFolder(req.user.id, data.folderName, req.query.parentFolderId));
       res.json({ success: true, message: "folder creation success" });
     } else {
       res.json({ success: false, message: result.errors[0].msg });
@@ -256,7 +259,7 @@ export async function deleteFile(req, res, next) {
   try {
     console.log("to be deleted file id: ");
     console.log(req.query.fileId);
-    deleteUnlinkFile(req.query.fileId)
+    deleteUnlinkFile(req.query.fileId);
     res.json({ success: true, message: "File Deleted" });
   } catch (err) {
     console.log("File Delete Error:");
@@ -266,19 +269,33 @@ export async function deleteFile(req, res, next) {
   }
 }
 
+async function getChildFolderFiles(userId, folderId){
+  let folders = [];
+  let files = []
+  let exit = 1;
+  folders = await getFoldersForParent(userId, folderId);
+  files = await getFilesForFolder(userId,folderId);
+  // result = result.concat(folders);
+  // result = result.concat(files);
+  return folders, files;
+}
+
 export async function deleteFolder(req, res, next) {
   try {
-    console.log("DELETE FOLDER METHOD")
+    console.log("DELETE FOLDER METHOD");
     const folderId = req.query.folderId;
-    console.log("FOLDER ID :"+folderId)
-    const folders = await getFoldersForParent(req.user.id, folderId)
-    const files = await getFilesForFolder(req.user.id,folderId)
-    console.log(files)
-    console.log(folders)
+    console.log("FOLDER ID :" + folderId);
+    console.log(await getChildFolderFiles(req.user.id, folderId))
+    // const result = await deleteFolderDb(folderId);
+
+    // const folders = await getFoldersForParent(req.user.id, folderId)
+    // const files = await getFilesForFolder(req.user.id,folderId)
+    // console.log(files)
+    // console.log(folders)
     // for (const file in files){
     //   console.log(file)
     // }
-    res.json({success:true, message:"Folder Deleted"})
+    res.json({ success: true, message: "Folder Deleted" });
   } catch (err) {
     throw err;
   }
