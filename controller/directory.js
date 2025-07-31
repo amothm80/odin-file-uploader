@@ -269,15 +269,32 @@ export async function deleteFile(req, res, next) {
   }
 }
 
-async function getChildFolderFiles(userId, folderId){
+async function deleteChildFolderFiles(userId, folderId){
   let folders = [];
   let files = []
   let exit = 1;
   folders = await getFoldersForParent(userId, folderId);
+  if (folders){
+    for (const folder of folders){
+      
+      // console.log(folder)
+      // console.log(`under folder ${folderId}`)
+      await deleteChildFolderFiles(userId, folder.id)
+    }
+  }
+
   files = await getFilesForFolder(userId,folderId);
-  // result = result.concat(folders);
-  // result = result.concat(files);
-  return folders, files;
+  if (files){
+    for (const file of files){
+      // console.log(`Deleting File ${file.id}`)
+      await deleteFileDb(file.id)
+      // console.log(file)
+      // console.log(`under folder ${folderId}`)
+    }
+  }
+  // console.log(`Deleting Folder ${folderId}`)
+  await deleteFolderDb(folderId)
+
 }
 
 export async function deleteFolder(req, res, next) {
@@ -285,7 +302,7 @@ export async function deleteFolder(req, res, next) {
     console.log("DELETE FOLDER METHOD");
     const folderId = req.query.folderId;
     console.log("FOLDER ID :" + folderId);
-    console.log(await getChildFolderFiles(req.user.id, folderId))
+    await deleteChildFolderFiles(req.user.id, folderId)
     // const result = await deleteFolderDb(folderId);
 
     // const folders = await getFoldersForParent(req.user.id, folderId)
